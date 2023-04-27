@@ -5,10 +5,8 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
 import org.chocosolver.solver.variables.BoolVar;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Algorithm {
     private final ArgumentationFramework af;
@@ -133,6 +131,29 @@ public class Algorithm {
         }
 
         return completeSets;
+    }
+
+    public List<List<String>> preferred() {
+        var admissibleSets = admissible();
+        var preferredArguments = new ArrayList<String>();
+        var result = new ArrayList<List<String>>();
+        admissibleSets.sort((o1, o2) -> o2.size() - o1.size());
+
+        for(var admissibleSet : admissibleSets) {
+            if(admissibleSet.stream()
+                    .distinct()
+                    .filter(preferredArguments::contains)
+                    .collect(Collectors.toSet()).isEmpty() && !admissibleSet.isEmpty()) {
+                result.add(admissibleSet);
+                preferredArguments.addAll(admissibleSet);
+            }
+
+            if(preferredArguments.size() == af.getArguments().size()) {
+                break;
+            }
+        }
+
+        return result;
     }
 
     private List<List<String>> getSolution() {

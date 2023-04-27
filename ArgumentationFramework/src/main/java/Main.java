@@ -45,5 +45,6 @@ public class Main {
         System.out.println("Stable: " + algorithm.stable());
         System.out.println("Admissible: " + algorithm.admissible());
         System.out.println("Complete: " + algorithm.complete());
+        System.out.println("Preferred: " + algorithm.preferred());
     }
 }
