@@ -5,7 +5,7 @@ const Options = (props) => {
     const [pressedButton, setPressedButton] = useState("");
     const [formValue, setFormValue] = useState("");
     const [characteristicElements, setCharacteristicElements] = useState("");
-    const [validated, setValidated] = useState(false);
+    const [, setValidated] = useState(false);
     const setProps = (solution, propName) => {
         let extensionsList = [];
 
