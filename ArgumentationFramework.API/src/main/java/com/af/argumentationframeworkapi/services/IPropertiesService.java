@@ -1,0 +1,12 @@
+package com.af.argumentationframeworkapi.services;
+
+import com.af.argumentationframeworkapi.models.ArgumentationFrameworkResponseModel;
+import com.af.argumentationframeworkapi.models.ArgumentationFrameworkRequestModel;
+import com.af.argumentationframeworkapi.models.CharacteristicFunctionRequestModel;
+import com.af.argumentationframeworkapi.models.CharacteristicFunctionResponseModel;
+
+public interface IPropertiesService {
+    ArgumentationFrameworkResponseModel solve(ArgumentationFrameworkRequestModel requestModel);
+
+    CharacteristicFunctionResponseModel characteristicFunction(CharacteristicFunctionRequestModel characteristicFunctionModel);
+}

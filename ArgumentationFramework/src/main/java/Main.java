@@ -48,7 +48,7 @@ public class Main {
         argumentationFramework.addAttack("A", "B");
         argumentationFramework.addAttack("B", "A");
         argumentationFramework.addAttack("A", "C");
-        argumentationFramework.addAttack("C", "D"); 
+        argumentationFramework.addAttack("C", "D");
 
         Algorithm algorithm = new Algorithm(argumentationFramework);
 
