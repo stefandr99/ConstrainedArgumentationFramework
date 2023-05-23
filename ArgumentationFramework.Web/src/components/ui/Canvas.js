@@ -120,7 +120,7 @@ const Canvas = (props) => {
         return () => {
             canvas.removeEventListener('click', handleNodeClick);
         };
-    }, [props.attaking, props.highlightedNodes, props.clear, startNode, endNode, argLetter]);
+    }, [props.attaking, props.highlightedNodes, props.clear, startNode, endNode, argLetter, props]);
 
     return (
         <div>
