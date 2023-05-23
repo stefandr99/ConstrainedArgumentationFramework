@@ -1,0 +1,10 @@
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    border: 10px solid black;
+    border-radius: 20px;
+}
