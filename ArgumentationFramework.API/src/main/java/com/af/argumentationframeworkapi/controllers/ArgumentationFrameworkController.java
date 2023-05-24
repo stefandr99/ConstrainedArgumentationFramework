@@ -8,6 +8,7 @@ import com.af.argumentationframeworkapi.services.IPropertiesService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("api/v1/af")
 public class ArgumentationFrameworkController {
     private final IPropertiesService propertiesService;
 
