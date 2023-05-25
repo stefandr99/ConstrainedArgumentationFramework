@@ -17,7 +17,7 @@ const Content = () => {
             attacks.push({ attacker: attack.attacker.letter, attacked: attack.attacked.letter });
         });
         let payload = { arguments: nodesRef.current.map((x) => x.letter), attacks: attacks };
-        let url = "http://localhost:8080/";
+        let url = "https://argumentation-framework-0.uc.r.appspot.com/";
 
         try {
             let response = await fetch(url, {
@@ -49,7 +49,7 @@ const Content = () => {
                 });
                 let payload = { arguments: argumentsLetters, attacks: attacks,
                     functionArguments: functionArguments };
-                let url = "http://localhost:8080/characteristic";
+                let url = "https://argumentation-framework-0.uc.r.appspot.com/characteristic";
 
                 try {
                     let response = await fetch(url, {
