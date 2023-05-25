@@ -9,8 +9,6 @@ import java.util.List;
 
 @Component
 public class PropertiesService implements IPropertiesService {
-
-
     @Override
     public ArgumentationFrameworkResponseModel solve(ArgumentationFrameworkRequestModel requestModel) {
         var algo = getAlgorithm(requestModel.getArguments(), requestModel.getAttacks());
