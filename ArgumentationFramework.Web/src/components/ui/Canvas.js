@@ -16,6 +16,48 @@ const Canvas = (props) => {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
+            if (e.button === 0) {
+                const clickedNode = props.attaking.nodes.current.find((node) => {
+                    const dx = node.x - x;
+                    const dy = node.y - y;
+                    return dx * dx + dy * dy <= 1000;
+                });
+
+                if (clickedNode) {
+                    if (!startNode) {
+                        setStartNode(clickedNode);
+                    } else if (!endNode && startNode !== clickedNode) {
+                        setEndNode(clickedNode);
+
+                        const newArc = { attacker: startNode, attacked: clickedNode };
+                        props.attaking.arcs.current = [
+                            ...props.attaking.arcs.current,
+                            newArc,
+                        ];
+                        setStartNode(null);
+                        setEndNode(null);
+                    } else if (endNode) {
+                        setStartNode(null);
+                        setEndNode(null);
+                    }
+                } else {
+                    props.attaking.nodes.current = [
+                        ...props.attaking.nodes.current,
+                        { x, y, letter: argLetter },
+                    ];
+                    setArgLetter((prevArgLetter) =>
+                        String.fromCharCode(prevArgLetter.charCodeAt(0) + 1)
+                    );
+                }
+            }
+        };
+
+        const handleContextMenu = (e) => {
+            e.preventDefault(); // Prevent the default context menu
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
             const clickedNode = props.attaking.nodes.current.find((node) => {
                 const dx = node.x - x;
                 const dy = node.y - y;
@@ -23,25 +65,23 @@ const Canvas = (props) => {
             });
 
             if (clickedNode) {
-                if (!startNode) {
-                    setStartNode(clickedNode);
-                } else if (!endNode && startNode !== clickedNode) {
-                    setEndNode(clickedNode);
-
-                    const newArc = { attacker: startNode, attacked: clickedNode };
-                    props.attaking.arcs.current = [...props.attaking.arcs.current, newArc];
-                    setStartNode(null);
-                    setEndNode(null);
-                } else if (endNode) {
-                    setStartNode(null);
-                    setEndNode(null);
-                }
-            } else {
-                props.attaking.nodes.current = [...props.attaking.nodes.current, { x, y, letter: argLetter }];
-                setArgLetter((prevArgLetter) =>
-                    String.fromCharCode(prevArgLetter.charCodeAt(0) + 1)
+                const filteredNodes = props.attaking.nodes.current.filter(
+                    (node) => node !== clickedNode
                 );
+                props.attaking.nodes.current = filteredNodes;
+
+                const filteredArcs = props.attaking.arcs.current.filter(
+                    (arc) =>
+                        arc.attacker !== clickedNode && arc.attacked !== clickedNode
+                );
+                props.attaking.arcs.current = filteredArcs;
             }
+
+            if(props.attaking.nodes.current.length === 0) {
+                setArgLetter('A');
+            }
+
+            drawNodes();
         };
 
         const drawNodes = () => {
@@ -56,11 +96,10 @@ const Canvas = (props) => {
 
             for (const node of props.attaking.nodes.current) {
                 ctx.beginPath();
-                if(props.highlightedNodes.includes(node.letter)) {
+                if (props.highlightedNodes.includes(node.letter)) {
                     ctx.fillStyle = '#4CBB17';
                     ctx.strokeStyle = '#4CBB17';
-                }
-                else {
+                } else {
                     ctx.fillStyle = 'black';
                     ctx.strokeStyle = 'black';
                 }
@@ -107,20 +146,37 @@ const Canvas = (props) => {
             ctx.stroke();
         };
 
-        canvas.addEventListener('click', handleNodeClick);
+        canvas.addEventListener('mousedown', handleNodeClick);
+        canvas.addEventListener('contextmenu', handleContextMenu);
 
-        if(props.clear) {
+        if (props.clear) {
             setArgLetter('A');
             props.setHighlightedNodes([]);
             props.setClear(false);
         }
 
+        if (props.uploadAF) {
+            setArgLetter(String.fromCharCode(props.uploadLetter.charCodeAt(0) + 1));
+            props.setUploadAF(false);
+        }
+
         drawNodes();
 
         return () => {
-            canvas.removeEventListener('click', handleNodeClick);
+            canvas.removeEventListener('mousedown', handleNodeClick);
+            canvas.removeEventListener('contextmenu', handleContextMenu);
         };
-    }, [props.attaking, props.highlightedNodes, props.clear, startNode, endNode, argLetter, props]);
+    }, [
+        props.attaking,
+        props.attaking.nodes,
+        props.highlightedNodes,
+        props.clear,
+        props.uploadAF,
+        startNode,
+        endNode,
+        argLetter,
+        props,
+    ]);
 
     return (
         <div>
