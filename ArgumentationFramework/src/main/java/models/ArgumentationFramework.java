@@ -1,7 +1,5 @@
 package models;
 
-import org.jgrapht.alg.util.Pair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +10,7 @@ public class ArgumentationFramework {
 
     private List<String> arguments;
 
-    private List<Pair<String, String>> attacks;
+    private List<Attack> attacks;
 
     private Map<String, List<String>> attacking;
 
@@ -26,20 +24,20 @@ public class ArgumentationFramework {
         attacked = new HashMap<>();
     }
 
-    public ArgumentationFramework(List<String> arguments, List<Pair<String, String>> attacks) {
+    public ArgumentationFramework(List<String> arguments, List<Attack> attacks) {
         this.arguments = arguments;
         this.size = arguments.size();
         this.attacks = attacks;
         this.setAttackHelpers(attacks);
     }
 
-    private void setAttackHelpers(List<Pair<String, String>> attacks) {
+    private void setAttackHelpers(List<Attack> attacks) {
         for (String argument : arguments) {
             attacking.put(argument, new ArrayList<>());
             attacked.put(argument, new ArrayList<>());
         }
         for(var attack : attacks) {
-            addToHelpers(attack.getFirst(), attack.getSecond());
+            addToHelpers(attack.getAttacker(), attack.getAttacked());
         }
     }
 
@@ -51,7 +49,7 @@ public class ArgumentationFramework {
     }
 
     public void addAttack(String attacker, String attacked) {
-        attacks.add(new Pair<>(attacker, attacked));
+        attacks.add(new Attack(attacker, attacked));
         addToHelpers(attacker, attacked);
     }
 
@@ -91,11 +89,11 @@ public class ArgumentationFramework {
         }
     }
 
-    public List<Pair<String, String>> getAttacks() {
+    public List<Attack> getAttacks() {
         return attacks;
     }
 
-    public void setAttacks(List<Pair<String, String>> attacks) {
+    public void setAttacks(List<Attack> attacks) {
         this.attacks = attacks;
     }
 

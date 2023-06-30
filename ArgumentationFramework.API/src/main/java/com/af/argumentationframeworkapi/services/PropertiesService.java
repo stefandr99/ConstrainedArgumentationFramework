@@ -18,9 +18,10 @@ public class PropertiesService implements IPropertiesService {
         var admissibleSets = algo.admissible();
         var completeSets = algo.complete();
         var preferredSets = algo.preferred();
+        var groundedSets = algo.grounded();
 
         return new ArgumentationFrameworkResponseModel(conflictFreeSets, stableSets, admissibleSets,
-                completeSets, preferredSets);
+                completeSets, preferredSets, groundedSets);
     }
 
     @Override

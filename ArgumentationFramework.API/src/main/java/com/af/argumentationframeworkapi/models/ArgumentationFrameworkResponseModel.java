@@ -13,12 +13,17 @@ public class ArgumentationFrameworkResponseModel {
 
     private List<List<String>> preferred;
 
-    public ArgumentationFrameworkResponseModel(List<List<String>> conflictFree, List<List<String>> stable, List<List<String>> admissible, List<List<String>> complete, List<List<String>> preferred) {
+    private List<List<String>> grounded;
+
+    public ArgumentationFrameworkResponseModel(List<List<String>> conflictFree, List<List<String>> stable,
+                                               List<List<String>> admissible, List<List<String>> complete,
+                                               List<List<String>> preferred, List<List<String>> grounded) {
         this.conflictFree = conflictFree;
         this.stable = stable;
         this.admissible = admissible;
         this.complete = complete;
         this.preferred = preferred;
+        this.grounded = grounded;
     }
 
     public List<List<String>> getConflictFree() {
@@ -59,5 +64,13 @@ public class ArgumentationFrameworkResponseModel {
 
     public void setPreferred(List<List<String>> preferred) {
         this.preferred = preferred;
+    }
+
+    public List<List<String>> getGrounded() {
+        return grounded;
+    }
+
+    public void setGrounded(List<List<String>> grounded) {
+        this.grounded = grounded;
     }
 }

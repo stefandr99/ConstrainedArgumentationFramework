@@ -11,6 +11,18 @@ const Canvas = (props) => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
+        const resizeCanvas = () => {
+            const containerWidth = canvas.parentNode.offsetWidth;
+
+            const newWidth = containerWidth < 800 ? containerWidth : 800;
+            const newHeight = containerWidth < 800 ? (containerWidth / 800) * 600 : 600;
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            drawNodes();
+        };
+
         const handleNodeClick = (e) => {
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -53,7 +65,7 @@ const Canvas = (props) => {
         };
 
         const handleContextMenu = (e) => {
-            e.preventDefault(); // Prevent the default context menu
+            e.preventDefault();
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -146,6 +158,9 @@ const Canvas = (props) => {
             ctx.stroke();
         };
 
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
         canvas.addEventListener('mousedown', handleNodeClick);
         canvas.addEventListener('contextmenu', handleContextMenu);
 
@@ -163,6 +178,7 @@ const Canvas = (props) => {
         drawNodes();
 
         return () => {
+            window.removeEventListener('resize', resizeCanvas);
             canvas.removeEventListener('mousedown', handleNodeClick);
             canvas.removeEventListener('contextmenu', handleContextMenu);
         };

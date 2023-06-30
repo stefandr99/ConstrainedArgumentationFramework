@@ -1,12 +1,15 @@
 import algo.Algorithm;
 import models.ArgumentationFramework;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ArgumentationFramework argumentationFramework = new ArgumentationFramework();
+
+        org.openjdk.jmh.Main.main(args);
 
         /*
             Example 1
@@ -44,18 +47,18 @@ public class Main {
 //        argumentationFramework.addAttack("M", "K");
 //        argumentationFramework.addAttack("K", "M");
 
-        argumentationFramework.setArguments(new ArrayList<>(List.of("A", "B", "C", "D")));
-        argumentationFramework.addAttack("A", "B");
-        argumentationFramework.addAttack("B", "A");
-        argumentationFramework.addAttack("A", "C");
-        argumentationFramework.addAttack("C", "D");
-
-        Algorithm algorithm = new Algorithm(argumentationFramework);
-
-        System.out.println("Conflict free: " + algorithm.conflictFree());
-        System.out.println("Stable: " + algorithm.stable());
-        System.out.println("Admissible: " + algorithm.admissible());
-        System.out.println("Complete: " + algorithm.complete());
-        System.out.println("Preferred: " + algorithm.preferred());
+//        argumentationFramework.setArguments(new ArrayList<>(List.of("A", "B", "C", "D")));
+//        argumentationFramework.addAttack("A", "B");
+//        argumentationFramework.addAttack("B", "A");
+//        argumentationFramework.addAttack("A", "C");
+//        argumentationFramework.addAttack("C", "D");
+//
+//        Algorithm algorithm = new Algorithm(argumentationFramework);
+//
+//        System.out.println("Conflict free: " + algorithm.conflictFree());
+//        System.out.println("Stable: " + algorithm.stable());
+//        System.out.println("Admissible: " + algorithm.admissible());
+//        System.out.println("Complete: " + algorithm.complete());
+//        System.out.println("Preferred: " + algorithm.preferred());
     }
 }

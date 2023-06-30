@@ -158,6 +158,35 @@ public class Algorithm {
         return result;
     }
 
+    public List<List<String>> grounded() {
+        var completeSets = complete();
+        var completeLength = completeSets.size();
+        var matrixDiag = completeLength;
+        var includedInAll = new int[completeLength][completeLength];
+
+        for(var i = 0; i < completeLength; i++) {
+            matrixDiag--;
+            for(var j = 0; j < matrixDiag; j++) {
+                if(i != j) {
+                    if(completeSets.get(i).containsAll(completeSets.get(j))) {
+                        includedInAll[j][i] = 1;
+                    }
+                    if(completeSets.get(j).containsAll(completeSets.get(i))) {
+                        includedInAll[i][j] = 1;
+                    }
+                }
+            }
+        }
+
+        for(var i = 0; i < completeLength; i++) {
+            if(Arrays.stream(includedInAll[i]).sum() == completeLength - 1) {
+                return new ArrayList<>(Collections.singleton(completeSets.get(i)));
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
     private List<List<String>> getSolution() {
         var allSolutions = model.getSolver().findAllSolutions();
         var result = new ArrayList<List<String>>();

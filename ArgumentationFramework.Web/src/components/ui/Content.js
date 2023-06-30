@@ -2,6 +2,7 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import Canvas from "./Canvas";
 import Options from "./Options";
 import { useRef, useState } from "react";
+import Legend from "./Legend";
 
 const Content = () => {
     const nodesRef = useRef([]);
@@ -12,6 +13,8 @@ const Content = () => {
     const [clearCanvas, setClearCanvas] = useState(false);
     const [uploadLetter, setUploadLetter] = useState('A');
     const [uploadAF, setUploadAF] = useState(false);
+    const [argumentLetterAssociation, setArgumentLetterAssociation] = useState({});
+    const [plainArgumentsList, setPlainArgumentsList] = useState([]);
 
     const fetchProps = async () => {
         let attacks = [];
@@ -22,7 +25,6 @@ const Content = () => {
         // let url = "https://argumentation-framework-0.uc.r.appspot.com/";
         let url = "http://localhost:8080/";
 
-        console.log("payload: ", payload);
         try {
             let response = await fetch(url, {
                 method: "POST",
@@ -34,7 +36,6 @@ const Content = () => {
             });
             let props = await response.json();
 
-            console.log(props);
             setAfProps(props);
         }
         catch(ex) {
@@ -67,7 +68,6 @@ const Content = () => {
                     });
                     let props = await response.json();
 
-                    console.log(props);
                     characteristicResult.current = props;
                 }
                 catch(ex) {
@@ -101,8 +101,10 @@ const Content = () => {
             const fileContent = event.target.result;
             const parsedJson = JSON.parse(fileContent);
             nodesRef.current = calculateArgumentsCoordinates(parsedJson.arguments);
-            arcsRef.current = setArgumentsAttacks(parsedJson.attacks, nodesRef.current);
+
             setUploadAF(true);
+
+            arcsRef.current = setArgumentsAttacks(parsedJson.attacks, nodesRef.current);
         };
 
         reader.readAsText(file);
@@ -110,13 +112,15 @@ const Content = () => {
         setTimeout(async () => { await fetchProps(); }, 500);
     };
 
+    let argLetterAssoc = {};
+    let plainArgList = [];
     const calculateArgumentsCoordinates = (args) => {
-        const nodeSize = 20; // Adjust this value to control the size of nodes
-        const padding = 20; // Adjust this value to add padding around the graph
+        const nodeSize = 20;
+        const padding = 20;
 
         const maxDimension = Math.min(750, 550);
         const availableRadius = (maxDimension / 2) - padding;
-        const minNodeSpacing = 2 * nodeSize; // Minimum spacing between nodes
+        const minNodeSpacing = 2 * nodeSize;
         const maxNodesPerCircle = Math.floor(2 * Math.PI * availableRadius / minNodeSpacing);
         const circles = Math.ceil(args.length / maxNodesPerCircle);
         const radius = availableRadius / circles;
@@ -126,18 +130,23 @@ const Content = () => {
         const angleIncrement = (2 * Math.PI) / args.length;
 
         const nodeCoordinates = [];
-
+        let legendLetter = "A";
         for (let i = 0; i < args.length; i++) {
-            const angle = i * angleIncrement;
+            const angle = (i + args.length / 2) * angleIncrement;
             const x = centerX + radius * Math.cos(angle);
             const y = centerY + radius * Math.sin(angle);
 
-            nodeCoordinates.push({ 'x': x, 'y': y, 'letter': args[i] });
+            nodeCoordinates.push({ 'x': x, 'y': y, 'letter': legendLetter });
+            argLetterAssoc[args[i]] = legendLetter;
+            plainArgList.push(args[i]);
+            legendLetter = String.fromCharCode(legendLetter.charCodeAt(0) + 1);
         }
+        legendLetter = String.fromCharCode(legendLetter.charCodeAt(0) - 1);
+        setUploadLetter(legendLetter);
 
-        setUploadLetter(args[args.length - 1]);
+        setArgumentLetterAssociation(argLetterAssoc);
+        setPlainArgumentsList(plainArgList);
 
-        console.log(nodeCoordinates);
         return nodeCoordinates;
     }
 
@@ -145,8 +154,8 @@ const Content = () => {
         const uploadedAttacks = [];
 
         attacks.forEach(attack => {
-            const attackerNode = args.find(a => a.letter === attack.attacker);
-            const attackedNode = args.find(a => a.letter === attack.attacked);
+            const attackerNode = args.find(a => a.letter === argLetterAssoc[attack.attacker]);
+            const attackedNode = args.find(a => a.letter === argLetterAssoc[attack.attacked]);
 
             uploadedAttacks.push({
                 'attacker': attackerNode,
@@ -166,38 +175,54 @@ const Content = () => {
     }
 
     return (
-        <Card className="text-center">
-            <Card.Body>
-                <Container className={"align-items-center justify-content-center"}>
-                    <Row>
-                        <Col sm={4}>
-                            <Options af={afProps} characteristic = {characteristicResult} fetchCharacteristic = {fetchCharacteristic}
-                                     setHighlights = {setHighlightedNodes} highlightedNodes = {highlightedNodes}
-                                     clear = {clearCanvas} />
-                        </Col>
-                        <Col sm={8}>
-                            <Canvas attaking={{ nodes: nodesRef, arcs: arcsRef }}
-                                    highlightedNodes = {highlightedNodes} setHighlightedNodes = {setHighlightedNodes}
-                                    clear = {clearCanvas} setClear = {setClearCanvas} uploadAF = {uploadAF} setUploadAF = {setUploadAF}
-                                    uploadLetter = {uploadLetter} />
-                        </Col>
-                    </Row>
-                </Container>
-                <div className={"mt-4"}>
-                    <Button className={"mx-1"} variant="primary" onClick={fetchProps}>
-                        Calculate
-                    </Button>
-                    <Button className={"mx-1"} variant="danger" onClick={clear}>
-                        Clear
-                    </Button>
-                    <input type="file" name="file" style={{width: '200px'}} onChange={handleFileChange} />
-                    <Button className={"mx-1"} variant="secondary" onClick={handleUploadClick}>
-                        Load
-                    </Button>
+        <div className="text-center">
+            <Container className="text-center">
+                <Row>
+                    <Col sm={10}>
+                        <Card className="text-center">
+                            <Card.Body>
+                                <Container className={"align-items-center justify-content-center"}>
+                                    <Row>
+                                        <Col sm={4}>
+                                            <Options af={afProps} characteristic = {characteristicResult} fetchCharacteristic = {fetchCharacteristic}
+                                                     setHighlights = {setHighlightedNodes} highlightedNodes = {highlightedNodes}
+                                                     clear = {clearCanvas} />
+                                        </Col>
+                                        <Col sm={8}>
+                                            <Canvas attaking={{ nodes: nodesRef, arcs: arcsRef }}
+                                                    highlightedNodes = {highlightedNodes} setHighlightedNodes = {setHighlightedNodes}
+                                                    clear = {clearCanvas} setClear = {setClearCanvas} uploadAF = {uploadAF} setUploadAF = {setUploadAF}
+                                                    uploadLetter = {uploadLetter} />
+                                        </Col>
+                                    </Row>
+                                </Container>
+                                <div className={"mt-4"}>
+                                    <Button className={"mx-1"} variant="success" onClick={fetchProps}>
+                                        Calculate
+                                    </Button>
+                                    <Button className={"mx-1 btn-clear"} variant="danger" onClick={clear}>
+                                        Clear
+                                    </Button>
+                                    <div className="file-input">
+                                        <input type="file" name="file" onChange={handleFileChange} />
+                                        <label className="file-input-label">Choose File</label>
+                                    </div>
+                                    {/*<input type="file" name="file" style={{width: '200px'}} onChange={handleFileChange} />*/}
+                                    <Button className={"mx-1"} variant="secondary" onClick={handleUploadClick}>
+                                        Load
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
 
-                </div>
-            </Card.Body>
-        </Card>
+                    <Col sm={2}>
+                        <Legend plainArgumentsList={plainArgumentsList} argumentLetterAssociation={argumentLetterAssociation}
+                                uploadAF={uploadAF} clear={clearCanvas}></Legend>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 

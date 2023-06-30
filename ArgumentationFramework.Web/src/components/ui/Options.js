@@ -6,11 +6,25 @@ const Options = (props) => {
     const [formValue, setFormValue] = useState("");
     const [characteristicElements, setCharacteristicElements] = useState("");
     const [, setValidated] = useState(false);
+
     const setProps = (solution, propName) => {
         let extensionsList = [];
 
         if (solution) {
-            if (solution.length === 0) {
+            if(solution.length === 0 && propName === "grounded") {
+                const key = `grounded`;
+                extensionsList.push(
+                    <Button
+                        key={key}
+                        className={"m-1"}
+                        variant={pressedButton === key ? "success" : "outline-success"}
+                        size="sm"
+                    >
+                        {"{ }"}
+                    </Button>
+                );
+            }
+            else if (solution.length === 0) {
                 extensionsList.push(<p>There is no {propName} extension in this Argumentation Framework</p>);
             }
 
@@ -34,7 +48,7 @@ const Options = (props) => {
                             }
                         }}
                     >
-                        {str.length === 0 ? <span>&#8709;</span> : str}
+                        {str.length === 0 ? "{ }" : str}
                     </Button>
                 );
             });
@@ -72,13 +86,16 @@ const Options = (props) => {
     const admissibles = setProps(props.af.admissible, "admissible");
     const completes = setProps(props.af.complete, "complete");
     const preferreds = setProps(props.af.preferred, "preferred");
+    const grounded = setProps(props.af.grounded, "grounded");
 
     return (
         <div
             className="d-flex flex-column align-items-center justify-content-center"
             style={{ minHeight: "100%" }}
         >
-            <Accordion flush style={{ width: 400 }}>
+
+            <div className="accordion-wrapper">
+                <Accordion flush>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Conflict Free</Accordion.Header>
                     <Accordion.Body>{conflictFrees}</Accordion.Body>
@@ -99,7 +116,12 @@ const Options = (props) => {
                     <Accordion.Header>Preferred</Accordion.Header>
                     <Accordion.Body>{preferreds}</Accordion.Body>
                 </Accordion.Item>
-            </Accordion>
+                <Accordion.Item eventKey="5">
+                    <Accordion.Header>Grounded</Accordion.Header>
+                    <Accordion.Body>{grounded}</Accordion.Body>
+                </Accordion.Item>
+                </Accordion>
+            </div>
             <br />
             <Form>
                 <Form.Group className="mb-3" controlId="formCharacteristicFunc">
@@ -118,7 +140,7 @@ const Options = (props) => {
                         Write arguments separated by comma
                     </Form.Text>
                 </Form.Group>
-                <Button variant="primary" onClick={calculateCharacteristic}>
+                <Button variant="success" onClick={calculateCharacteristic}>
                     F(x)
                 </Button>
             </Form>
