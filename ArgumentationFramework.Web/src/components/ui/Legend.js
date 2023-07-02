@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 
 const Legend = (props) => {
     let [ulLegend, setUlLegend] = useState([]);
+    let [legendTitle, setLegendTitle] = useState("");
 
     useEffect(() => {
         let list = [];
@@ -11,11 +12,13 @@ const Legend = (props) => {
         ));
 
         setUlLegend(list);
-    }, [props.argumentLetterAssociation, props.plainArgumentsList]);
+        setLegendTitle(props.legendTitle);
+    }, [props.argumentLetterAssociation, props.plainArgumentsList, props.legendTitle]);
 
     useEffect(() => {
         if (props.clear) {
             setUlLegend([]);
+            setLegendTitle("");
         }
     }, [props.clear]);
 
@@ -23,6 +26,7 @@ const Legend = (props) => {
         <div>
             <Card className="text-center">
                 <Card.Body className={"legend"}>
+                    <p style={{ fontSize: 20 }}><b>{legendTitle}</b></p>
                     <b>Legend:</b>
                     <ul className={"legend-list"}>{ulLegend}</ul>
                 </Card.Body>

@@ -15,6 +15,7 @@ const Content = () => {
     const [uploadAF, setUploadAF] = useState(false);
     const [argumentLetterAssociation, setArgumentLetterAssociation] = useState({});
     const [plainArgumentsList, setPlainArgumentsList] = useState([]);
+    const [legendTitle, setLegendTitle] = useState("");
 
     const fetchProps = async () => {
         let attacks = [];
@@ -22,8 +23,8 @@ const Content = () => {
             attacks.push({ attacker: attack.attacker.letter, attacked: attack.attacked.letter });
         });
         let payload = { arguments: nodesRef.current.map((x) => x.letter), attacks: attacks };
-        let url = "https://argumentation-framework-0.uc.r.appspot.com/";
-        // let url = "http://localhost:8080/";
+        // let url = "https://argumentation-framework-0.uc.r.appspot.com/";
+        let url = "http://localhost:8080/";
 
         try {
             let response = await fetch(url, {
@@ -105,6 +106,7 @@ const Content = () => {
             setUploadAF(true);
 
             arcsRef.current = setArgumentsAttacks(parsedJson.attacks, nodesRef.current);
+            setLegendTitle(parsedJson.title);
         };
 
         reader.readAsText(file);
@@ -218,7 +220,7 @@ const Content = () => {
 
                     <Col sm={2}>
                         <Legend plainArgumentsList={plainArgumentsList} argumentLetterAssociation={argumentLetterAssociation}
-                                uploadAF={uploadAF} clear={clearCanvas}></Legend>
+                                uploadAF={uploadAF} clear={clearCanvas} legendTitle={legendTitle}></Legend>
                     </Col>
                 </Row>
             </Container>
