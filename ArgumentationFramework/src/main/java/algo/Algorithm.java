@@ -3,6 +3,7 @@ package algo;
 import models.ArgumentationFramework;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
+import org.chocosolver.solver.search.limits.SolutionCounter;
 import org.chocosolver.solver.variables.BoolVar;
 
 import java.util.*;
@@ -188,7 +189,7 @@ public class Algorithm {
     }
 
     private List<List<String>> getSolution() {
-        var allSolutions = model.getSolver().findAllSolutions();
+        var allSolutions = model.getSolver().findAllSolutions(new SolutionCounter(model, 500));
         var result = new ArrayList<List<String>>();
 
         for (var solution : allSolutions) {

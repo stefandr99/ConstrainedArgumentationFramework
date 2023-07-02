@@ -1,4 +1,6 @@
 import algo.Algorithm;
+import algo.Generator;
+import benchmark.ArgumentationFrameworkBenchmarking;
 import models.ArgumentationFramework;
 
 import java.io.IOException;
@@ -7,7 +9,18 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        ArgumentationFramework argumentationFramework = new ArgumentationFramework();
+//        var af = Generator.Generate();
+//
+//        Algorithm algorithm = new Algorithm(af);
+//
+//        var a = algorithm.stable();
+//
+//        System.out.println("Conflict free: " + algorithm.conflictFree());
+//        System.out.println("Stable: " + algorithm.stable());
+//        System.out.println("Admissible: " + algorithm.admissible());
+//        System.out.println("Complete: " + algorithm.complete());
+//        System.out.println("Preferred: " + algorithm.preferred());
+//        System.out.println("Grounded: " + algorithm.grounded());
 
         org.openjdk.jmh.Main.main(args);
 

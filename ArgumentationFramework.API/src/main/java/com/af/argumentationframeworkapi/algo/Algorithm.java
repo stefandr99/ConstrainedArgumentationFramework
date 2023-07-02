@@ -3,6 +3,7 @@ package com.af.argumentationframeworkapi.algo;
 import com.af.argumentationframeworkapi.models.ArgumentationFramework;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.expression.discrete.relational.ReExpression;
+import org.chocosolver.solver.search.limits.SolutionCounter;
 import org.chocosolver.solver.variables.BoolVar;
 
 import java.util.*;
@@ -136,7 +137,7 @@ public class Algorithm {
     }
 
     public List<List<String>> preferred() {
-        var admissibleSets = admissible();
+        var admissibleSets = complete();
         var preferredArguments = new ArrayList<String>();
         var result = new ArrayList<List<String>>();
         admissibleSets.sort((o1, o2) -> o2.size() - o1.size());
@@ -165,7 +166,6 @@ public class Algorithm {
         var includedInAll = new int[completeLength][completeLength];
 
         for(var i = 0; i < completeLength; i++) {
-            matrixDiag--;
             for(var j = 0; j < matrixDiag; j++) {
                 if(i != j) {
                     if(completeSets.get(i).containsAll(completeSets.get(j))) {
@@ -176,6 +176,8 @@ public class Algorithm {
                     }
                 }
             }
+
+            matrixDiag--;
         }
 
         for(var i = 0; i < completeLength; i++) {
@@ -188,7 +190,7 @@ public class Algorithm {
     }
 
     private List<List<String>> getSolution() {
-        var allSolutions = model.getSolver().findAllSolutions();
+        var allSolutions = model.getSolver().findAllSolutions(new SolutionCounter(model, 5000));
         var result = new ArrayList<List<String>>();
 
         for (var solution : allSolutions) {

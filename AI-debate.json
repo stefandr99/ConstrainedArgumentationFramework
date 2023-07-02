@@ -1,0 +1,88 @@
+{
+   "arguments":[
+      "Facial recognition has been found to be racially biased",
+      "Unemployment",
+      "Not environment friendly",
+      "No emotions",
+      "Lacking creativity",
+      "New improvements",
+      "Less chances to make mistakes",
+      "Available 24/7",
+      "Faster decision-making",
+      "Make day by day life easier"
+   ],
+   "attacks":[
+      {
+         "attacker":"Facial recognition has been found to be racially biased",
+         "attacked":"Less chances to make mistakes"
+      },
+      {
+         "attacker":"Facial recognition has been found to be racially biased",
+         "attacked":"Faster decision-making"
+      },
+      {
+         "attacker":"Facial recognition has been found to be racially biased",
+         "attacked":"Make day by day life easier"
+      },
+      {
+         "attacker":"Unemployment",
+         "attacked":"Available 24/7"
+      },
+      {
+         "attacker":"Not environment friendly",
+         "attacked":"Available 24/7"
+      },
+      {
+         "attacker":"No emotions",
+         "attacked":"Faster decision-making"
+      },
+      {
+         "attacker":"Lacking creativity",
+         "attacked":"Faster decision-making"
+      },
+      {
+         "attacker":"Lacking creativity",
+         "attacked":"Make day by day life easier"
+      },
+	  {
+         "attacker":"New improvements",
+         "attacked":"Facial recognition has been found to be racially biased"
+      },
+      {
+         "attacker":"New improvements",
+         "attacked":"No emotions"
+      },
+      {
+         "attacker":"New improvements",
+         "attacked":"Lacking creativity"
+      },
+      {
+         "attacker":"Less chances to make mistakes",
+         "attacked":"Unemployment"
+      },
+      {
+         "attacker":"Less chances to make mistakes",
+         "attacked":"No emotions"
+      },
+      {
+         "attacker":"Available 24/7",
+         "attacked":"Unemployment"
+      },
+      {
+         "attacker":"Faster decision-making",
+         "attacked":"No emotions"
+      },
+      {
+         "attacker":"Faster decision-making",
+         "attacked":"Lacking creativity"
+      },
+      {
+         "attacker":"Make day by day life easier",
+         "attacked":"Lacking creativity"
+      },
+      {
+         "attacker":"Make day by day life easier",
+         "attacked":"Not environment friendly"
+      }
+   ]
+}
