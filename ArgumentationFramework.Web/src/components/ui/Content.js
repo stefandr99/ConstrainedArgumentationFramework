@@ -23,8 +23,8 @@ const Content = () => {
             attacks.push({ attacker: attack.attacker.letter, attacked: attack.attacked.letter });
         });
         let payload = { arguments: nodesRef.current.map((x) => x.letter), attacks: attacks };
-        // let url = "https://argumentation-framework-0.uc.r.appspot.com/";
-        let url = "http://localhost:8080/";
+        let url = "https://argumentation-framework-0.uc.r.appspot.com/";
+        // let url = "http://localhost:8080/";
 
         try {
             let response = await fetch(url, {
